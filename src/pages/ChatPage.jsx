@@ -57,11 +57,11 @@ export default function ChatPage() {
     if (text.includes("verdadero") || text.includes("sustentado")) return "#d4edda"; // Verde 
     if (text.includes("falso") || text.includes("engañoso")) return "#f8d7da"; // Rojo 
     if (text.includes("impreciso")) return "#fff3cd"; // Amarillo 
-    if (text.includes("investigando") || text.includes("hola")) return "var(--color-bg-surface)"; // Blanco original
+    if (text.includes("investigando") || text.includes("hola")) return "#f8fafc"; // Gris muy claro
     return "#e2e3e5"; // Gris
   };
 
-  const bubbleBgColor = currentResponse ? getBubbleColor(currentResponse.etiqueta) : 'var(--color-bg-surface)';
+  const bubbleBgColor = currentResponse ? getBubbleColor(currentResponse.etiqueta) : '#f8fafc';
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 'var(--spacing-lg)', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
@@ -119,13 +119,13 @@ export default function ChatPage() {
             }}></div>
 
             {/* Etiqueta / Título */}
-            <h2 style={{ marginTop: 0, textTransform: "uppercase", color: "var(--color-text-main, #333)", fontSize: "1.5rem", fontWeight: "900" }}>
+            <h2 style={{ marginTop: 0, textTransform: "uppercase", color: "#1F2937", fontSize: "1.5rem", fontWeight: "900" }}>
               {currentResponse.etiqueta}
             </h2>
 
             {/* Texto de Explicación */}
             <p style={{
-              fontSize: '1.25rem', lineHeight: '1.8', color: isLoading ? 'var(--color-text-muted)' : 'var(--color-text-main)',
+              fontSize: '1.25rem', lineHeight: '1.8', color: isLoading ? '#6B7280' : '#374151',
               whiteSpace: 'pre-wrap', margin: 0, fontStyle: isLoading ? 'italic' : 'normal'
             }}>
               {currentResponse.explicacion}
@@ -134,36 +134,22 @@ export default function ChatPage() {
             {/* Fuentes Oficiales */}
             {!isLoading && currentResponse.fuentes_citadas && currentResponse.fuentes_citadas.length > 0 && (
               <div style={{ marginTop: 'var(--spacing-lg)', paddingTop: 'var(--spacing-md)', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
-                <strong style={{ display: 'block', marginBottom: 'var(--spacing-sm)', color: 'var(--color-primary)', fontSize: '1rem' }}>Evidencia / Fuentes Oficiales:</strong>
+                <strong style={{ display: 'block', marginBottom: 'var(--spacing-sm)', color: '#1D4ED8', fontSize: '1rem' }}>Evidencia / Fuentes Oficiales:</strong>
                 <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
                   {currentResponse.fuentes_citadas.map((src, idx) => (
-                    src.url ? (
                       <a
-                        key={idx} href={src.url} target="_blank" rel="noreferrer"
+                        key={idx} href={src.url || "/plan.pdf"} target="_blank" rel="noreferrer" download={!src.url ? "Plan_de_Gobierno.pdf" : undefined}
                         style={{
                           fontSize: '0.875rem', padding: 'var(--spacing-sm) var(--spacing-md)',
                           backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.1)',
-                          borderRadius: 'var(--radius-md)', textDecoration: 'none', color: 'var(--color-text-main)',
-                          fontWeight: '600', transition: 'background-color 0.2s', display: 'flex', alignItems: 'center', gap: '5px'
+                          borderRadius: 'var(--radius-md)', textDecoration: 'none', color: '#1F2937',
+                          fontWeight: '600', transition: 'background-color 0.2s', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer'
                         }}
                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fff'}
                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.7)'}
                       >
-                        <span style={{ color: 'red' }}>▶</span> {src.nombre} - {src.detalle}
+                        <span style={{ color: src.url ? 'red' : 'gray' }}>{src.url ? '▶' : '📄'}</span> {src.nombre} - {src.detalle}
                       </a>
-                    ) : (
-                      <span
-                        key={idx}
-                        style={{
-                          fontSize: '0.875rem', padding: 'var(--spacing-sm) var(--spacing-md)',
-                          backgroundColor: 'rgba(255,255,255,0.5)', border: '1px solid rgba(0,0,0,0.1)',
-                          borderRadius: 'var(--radius-md)', color: 'var(--color-text-main)',
-                          fontWeight: '500', display: 'flex', alignItems: 'center', gap: '5px'
-                        }}
-                      >
-                        📄 {src.nombre} - {src.detalle}
-                      </span>
-                    )
                   ))}
                 </div>
               </div>

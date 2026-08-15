@@ -28,6 +28,7 @@ export default function CandidatesPage() {
   const [candidatos, setCandidatos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [swiperInstance, setSwiperInstance] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -285,6 +286,7 @@ export default function CandidatesPage() {
         ) : (
           <div style={{ width: '100%', paddingTop: '2rem', paddingBottom: '4rem' }}>
             <Swiper
+              onSwiper={setSwiperInstance}
               effect={'coverflow'}
               grabCursor={true}
               centeredSlides={true}
@@ -310,9 +312,21 @@ export default function CandidatesPage() {
                 '--swiper-navigation-size': '2rem',
               }}
             >
-              {candidatos.map((candidate) => (
-                <SwiperSlide key={candidate.id} style={{ width: '320px', height: '450px' }}>
-                  <CandidateCard candidate={candidate} />
+              {candidatos.map((candidate, index) => (
+                <SwiperSlide 
+                  key={candidate.id} 
+                  style={{ width: '320px', height: '450px' }}
+                >
+                  <div
+                    style={{ width: '100%', height: '100%' }}
+                    onMouseEnter={() => {
+                      if (swiperInstance) {
+                        swiperInstance.slideTo(index);
+                      }
+                    }}
+                  >
+                    <CandidateCard candidate={candidate} />
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>

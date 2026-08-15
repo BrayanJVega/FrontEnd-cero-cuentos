@@ -103,8 +103,11 @@ export default function CandidateCard({ candidate }) {
         </p>
 
         <a 
-          href={candidate.planUrl} 
-          download
+          href={candidate.planUrl || '/plan.pdf'} 
+          target="_blank"
+          rel="noopener noreferrer"
+          download="Plan_de_Gobierno.pdf"
+          onClick={(e) => e.stopPropagation()}
           style={{
             display: 'flex',
             alignItems: 'center',
