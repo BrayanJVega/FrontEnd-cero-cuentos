@@ -1,6 +1,16 @@
 import { FileText } from 'lucide-react';
 
 export default function CandidateCard({ candidate }) {
+  const getPlanPdf = (name) => {
+    if (!name) return '/plan.pdf';
+    if (name.includes('Yunda')) return '/planes/Plan_trabajo_Jorge_Homero_Yunda_Machado.pdf';
+    if (name.includes('Freile')) return '/planes/Plan_trabajo_Pedro_Jose_Freile_Vallejo.pdf';
+    if (name.includes('Muñoz') || name.includes('Munoz')) return '/planes/Plan_trabajo_Pabel_Munoz.pdf';
+    if (name.includes('Páez') || name.includes('Paez')) return '/planes/Plan_trabajo_Andres_Paez.pdf';
+    if (name.includes('Coloma')) return '/planes/Plan_trabajo_Luz_Elena_Coloma.pdf';
+    return '/plan.pdf';
+  };
+
   return (
     <div style={{
       /* Estilo Glassmorphism para el carrusel */
@@ -103,10 +113,10 @@ export default function CandidateCard({ candidate }) {
         </p>
 
         <a 
-          href={candidate.planUrl || '/plan.pdf'} 
+          href={candidate.planUrl || getPlanPdf(candidate.name)} 
           target="_blank"
           rel="noopener noreferrer"
-          download="Plan_de_Gobierno.pdf"
+          download={`Plan_de_Gobierno_${candidate.name.replace(/\s+/g, '_')}.pdf`}
           onClick={(e) => e.stopPropagation()}
           style={{
             display: 'flex',

@@ -61,6 +61,17 @@ export default function ChatPage() {
     return "#e2e3e5"; // Gris
   };
 
+  const getPlanPdfFromText = (text) => {
+    if (!text) return '/plan.pdf';
+    const lowerText = text.toLowerCase();
+    if (lowerText.includes('yunda')) return '/planes/Plan_trabajo_Jorge_Homero_Yunda_Machado.pdf';
+    if (lowerText.includes('freile')) return '/planes/Plan_trabajo_Pedro_Jose_Freile_Vallejo.pdf';
+    if (lowerText.includes('muñoz') || lowerText.includes('munoz')) return '/planes/Plan_trabajo_Pabel_Munoz.pdf';
+    if (lowerText.includes('páez') || lowerText.includes('paez')) return '/planes/Plan_trabajo_Andres_Paez.pdf';
+    if (lowerText.includes('coloma')) return '/planes/Plan_trabajo_Luz_Elena_Coloma.pdf';
+    return '/plan.pdf';
+  };
+
   const bubbleBgColor = currentResponse ? getBubbleColor(currentResponse.etiqueta) : '#f8fafc';
 
   return (
@@ -136,9 +147,13 @@ export default function ChatPage() {
               <div style={{ marginTop: 'var(--spacing-lg)', paddingTop: 'var(--spacing-md)', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
                 <strong style={{ display: 'block', marginBottom: 'var(--spacing-sm)', color: '#1D4ED8', fontSize: '1rem' }}>Evidencia / Fuentes Oficiales:</strong>
                 <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
-                  {currentResponse.fuentes_citadas.map((src, idx) => (
+                  {currentResponse.fuentes_citadas.map((src, idx) => {
+                    const finalUrl = src.url || getPlanPdfFromText(currentResponse.explicacion + " " + src.detalle);
+                    const isPdf = !src.url;
+                    
+                    return (
                       <a
-                        key={idx} href={src.url || "/plan.pdf"} target="_blank" rel="noreferrer" download={!src.url ? "Plan_de_Gobierno.pdf" : undefined}
+                        key={idx} href={finalUrl} target="_blank" rel="noreferrer" download={isPdf ? "Plan_de_Gobierno.pdf" : undefined}
                         style={{
                           fontSize: '0.875rem', padding: 'var(--spacing-sm) var(--spacing-md)',
                           backgroundColor: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.1)',
@@ -150,7 +165,8 @@ export default function ChatPage() {
                       >
                         <span style={{ color: src.url ? 'red' : 'gray' }}>{src.url ? '▶' : '📄'}</span> {src.nombre} - {src.detalle}
                       </a>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
